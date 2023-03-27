@@ -78,11 +78,10 @@ public String getTime2() throws Exception {
     </Loggers>
 </Configuration>
 ```
-5. 쿠키/세션이란?
+5. 세션이란?
    * 웹은 기본적으로 무상태 연결(요청 -> 처리 -> 응답 -> 연결 종료)
    * 기존의 방문자를 기억하기 위해 세션, 쿠기, 토큰을 이용하게 됨
    * 로그인 유지를 위한 모든 기능을 세션 트랙킹(session tracking)이라고 한다.
-   * 쿠키는 사용자 pc에 문자열(이름/값)으로 이루어진 서버 <-> 브라우저 간의 정보를 저장
    * 세션은 서버에 문자열(이름/값)으로 저장된다.
    * 톰켓에선 JSESSIONID 라는 이름의 쿠키로 생성된다.
    * 톰켓은 주기적으로 세션 저장소를 조사하면서 더 이상 사용하지 않으면 값을 정리한다.(기본 30분)
@@ -97,3 +96,9 @@ public String getTime2() throws Exception {
    * Request Scope : HttpServletRequest 에 setAttribute() 로 저장한 변수
    * Session Scope : HttpSession 을 이용해서 setAttribute() 로 저장한 변수
    * Application Scope : ServletContext 를 이용해서 setAttribute() 로 저장한 변수
+8. 사용자 정의 쿠키
+   * 생성 : 개발자가 직접 newCookie() 로 생성(name, value)
+   * 전송 : 반드시 HttpServletResponse 에 addCookie() 를 통해 전송
+   * 유효 기간 : 쿠키 생성할 때 초 단위로 지정 가능
+   * 브라우저의 보관 방식 : 유효기간이 없는 경우에는 메모리에만 보관, 유효 기간에 있는 경우 파일로 보관
+   * 쿠키의 크기 : 4kb
