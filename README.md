@@ -91,4 +91,9 @@ public String getTime2() throws Exception {
    * 그래서 대부분 필터를 이용하여 처리한다.
    * 필터는 서블릿/jsp 에 도달하는 과정에서 필터링 하는 역할을 한다.
    * WebFilter 어노테이션으로 지정한 경로에 접근할 때 필터가 작동하도록 하면 동일한 로직을 필터로 분리할 수 있다.
-   
+7. EL의 Scope 와 HttpSession 접근하기
+   * EL 의 Scope 는 setAttribute() 되어 있을 데이터를 찾을 때 사용된다.
+   * Page Scope : JSP 에서 EL을 통해 <c:set> 으로 저장한 변수
+   * Request Scope : HttpServletRequest 에 setAttribute() 로 저장한 변수
+   * Session Scope : HttpSession 을 이용해서 setAttribute() 로 저장한 변수
+   * Application Scope : ServletContext 를 이용해서 setAttribute() 로 저장한 변수
