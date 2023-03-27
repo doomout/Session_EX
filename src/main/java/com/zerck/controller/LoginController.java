@@ -1,5 +1,7 @@
 package com.zerck.controller;
 
+import com.zerck.dto.MemberDTO;
+import com.zerck.service.MemberService;
 import lombok.extern.java.Log;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
@@ -27,11 +29,21 @@ public class LoginController extends HttpServlet {
         String mid = req.getParameter("mid"); //로그인 화면에서 ID 부분
         String mpw = req.getParameter("mpw"); //로그인 화면에서 PW 부분
 
-        String str = mid+mpw; //id와 암호를 합쳐서 str에 저장
-        HttpSession session = req.getSession(); //세션 생성
+        try {
+            MemberDTO memberDTO = MemberService.INSTANCE.login(mid, mpw);
+            HttpSession session = req.getSession(); //세션 생성
 
-        //session 을 이용해서 사용자 공간에 loginInfo 라는 이름으로 문자열 보관
-        session.setAttribute("loginInfo", str);
-        resp.sendRedirect("/todo/list");
+            //정상적으로 로그인 된 경우 HttpSession 을 이용해서 사용자 공간에 loginInfo 라는 이름으로 문자열 보관
+            session.setAttribute("loginInfo", memberDTO);
+            resp.sendRedirect("/todo/list");
+
+        } catch (Exception e){
+            resp.sendRedirect("/login?result=error");
+        }
+
+
+
+
+
     }
 }
