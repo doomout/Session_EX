@@ -3,13 +3,12 @@ package com.zerck.controller;
 import com.zerck.dto.MemberDTO;
 import com.zerck.service.MemberService;
 import lombok.extern.java.Log;
-import javax.servlet.http.HttpSession;
+
+import javax.servlet.http.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet("/login")
 @Log
@@ -28,9 +27,25 @@ public class LoginController extends HttpServlet {
 
         String mid = req.getParameter("mid"); //로그인 화면에서 ID 부분
         String mpw = req.getParameter("mpw"); //로그인 화면에서 PW 부분
+        String auto = req.getParameter("auto"); //자동 로그인 체크 여부
+
+        boolean rememberMe = auto != null && auto.equals("on"); //on 인지 확인
 
         try {
             MemberDTO memberDTO = MemberService.INSTANCE.login(mid, mpw);
+
+            if (rememberMe){
+                String uuid = UUID.randomUUID().toString(); //java.util 의 UUID 를 이용해서 임의 번호 생성
+
+                MemberService.INSTANCE.updateUuid(mid, uuid);
+                memberDTO.setUuid(uuid);
+
+                Cookie rememberCookie = new Cookie("remember-me", uuid);
+                rememberCookie.setMaxAge(60*60*24*7); // 유효기간 1주일
+                rememberCookie.setPath("/"); //쿠키 저장소는 최상위
+                resp.addCookie(rememberCookie);
+            }
+
             HttpSession session = req.getSession(); //세션 생성
 
             //정상적으로 로그인 된 경우 HttpSession 을 이용해서 사용자 공간에 loginInfo 라는 이름으로 문자열 보관
@@ -40,10 +55,5 @@ public class LoginController extends HttpServlet {
         } catch (Exception e){
             resp.sendRedirect("/login?result=error");
         }
-
-
-
-
-
     }
 }
