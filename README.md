@@ -1,5 +1,5 @@
 도서명 - 자바 웹 개발 워크북  
-IDE - IntelliJ IDEA 2022.3.3 (Ultimate Edition)  
+IDE - IntelliJ IDEA 2023.1 (Ultimate Edition)  
 자바 버전 - JDK 11  
 웹 서버 - 톰캣 9.0.73  
 DB - MariaDB 10.5(x64)  
@@ -102,3 +102,13 @@ public String getTime2() throws Exception {
    * 유효 기간 : 쿠키 생성할 때 초 단위로 지정 가능
    * 브라우저의 보관 방식 : 유효기간이 없는 경우에는 메모리에만 보관, 유효 기간에 있는 경우 파일로 보관
    * 쿠키의 크기 : 4kb
+9. 자동 로그인 
+   * 사용자가 로그인 할 때 임의의 문자열을 생성하고 이를 DB에 보관
+   * 쿠키에는 생성된 문자열을 값으로 삼고 유효기간은 1주일로 지정
+   * 현자 사용자의 HttpSession 에 로그인 정보가 없는 경우에만 쿠키 확인
+   * 쿠키의 값과 DB 값을 비교하고 같다면 사용자 정보를 읽어와서 HttpSession 에 사용자 정보 추가
+10. 로그인 체크  
+    * HttpServletRequest 를 이용해서 모든 쿠키 중에서 'remember-me' 이름의 쿠키를 검색
+    * 해당 쿠키의 value 를 이용해서 MemberService 를 통해 MemberDTO 를 구성
+    * HttpSession 을 이용해서 'loginInfo' 라는 이름으로 MemberDTO 를 setAttribute()
+    * 정상적으로 FilterChain 의 doFilter() 을 수행
